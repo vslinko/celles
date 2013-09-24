@@ -1,0 +1,36 @@
+{
+  "name": "celles",
+  "version": "0.1.0",
+  "description": "Small FRP library",
+  "keywords": ["frp"],
+  "homepage": "https://github.com/vslinko/celles",
+  "bugs": {
+    "url": "https://github.com/vslinko/celles/issues",
+    "email": "vyacheslav.slinko@gmail.com"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Vyacheslav Slinko",
+    "email": "vyacheslav.slinko@gmail.com"
+  },
+  "main": "lib/celles",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/vslinko/celles.git"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt": "~0.4",
+    "grunt-contrib-watch": "~0.5",
+    "grunt-mocha-test": "~0.7",
+    "load-grunt-tasks": "~0.1",
+    "chai": "~1.8",
+    "sinon": "~1.7",
+    "sinon-chai": "~2.4"
+  },
+  "engines": {
+    "node": ">=0.10"
+  }
+}

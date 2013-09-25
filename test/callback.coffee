@@ -7,7 +7,7 @@ chai.use require "sinon-chai"
 expect = chai.expect
 
 
-describe "celles.BaseCell", ->
+describe "celles.callback.CallbackCell", ->
   describe "::constructor", ->
     it "should subscribe to callback", (callback) ->
       cell = celles.callback (callback) ->

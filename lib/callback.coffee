@@ -5,10 +5,23 @@ class CallbackCell extends BaseCell
   constructor: (callback) ->
     super()
 
-    callback (value) =>
-      if value isnt @value
-        @value = value
-        @triggerChange()
+    try
+      callback (value) =>
+        changed = false
+
+        if @error isnt null
+          changed = true
+          @error = null
+
+        if value isnt @value
+          @value = value
+          changed = true
+
+        if changed
+          @triggerChange()
+
+    catch error
+      @error = error
 
 
 module.exports = (callback) ->

@@ -9,11 +9,7 @@ class FormulaCell extends BaseCell
 
     @cells.forEach (cell) =>
       if cell instanceof BaseCell
-        cell.onChange =>
-          previousValue = @value
-          @calculate()
-          if previousValue isnt @value
-            @triggerChange()
+        cell.onChange => @calculate()
 
   calculate: ->
     args = @cells.map (cell) ->
@@ -22,7 +18,28 @@ class FormulaCell extends BaseCell
       else
         cell
 
-    @value = @formula.apply value: @value, args
+    changed = false
+
+    if @error
+      @error = null
+      changed = true
+
+    try
+      previousValue = @value
+
+      @value = @formula.apply @, args
+
+      if previousValue isnt @value
+        changed = true
+
+    catch error
+      @value = null
+      @error = error
+      @triggerError()
+      return
+
+    if changed
+      @triggerChange()
 
 
 module.exports = (cells, formula) ->

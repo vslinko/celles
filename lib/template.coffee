@@ -15,8 +15,9 @@ iterator = (object, callback) ->
 recursivelyCalculate = (valueRoot, templateRoot, cellCallback) ->
   iterator templateRoot, (cell, key) ->
     if cell instanceof BaseCell
+      throw cell.error if cell.error
       valueRoot[key] = cell.value
-      cellCallback valueRoot, key, cell if cellCallback
+      cellCallback cell if cellCallback
 
     else if Array.isArray cell
       valueRoot[key] = []
@@ -35,23 +36,31 @@ class TemplateCell extends BaseCell
   constructor: (@template) ->
     super()
 
-    @calculate (valueRoot, key, cell) =>
-      cell.onChange =>
-        if valueRoot[key] isnt cell.value
-          valueRoot[key] = cell.value
-          @triggerChange()
-
-  calculate: (cellCallback) ->
     if @template instanceof BaseCell
       throw new Error "Unable to create template cell from other cell"
-    else if Array.isArray @template
-      @value = []
-    else if @template instanceof Object
-      @value = {}
-    else
+
+    if not Array.isArray(@template) and @template not instanceof Object
       throw new Error "Unable to create template cell from scalar value"
 
-    recursivelyCalculate @value, @template, cellCallback
+    @calculate (cell) =>
+      cell.onChange => @calculate()
+      cell.onError => @calculate()
+
+  calculate: (cellCallback) ->
+    @error = null
+
+    @value = if Array.isArray @template
+      []
+    else if @template instanceof Object
+      {}
+
+    try
+      recursivelyCalculate @value, @template, cellCallback
+      @triggerChange()
+    catch error
+      @value = null
+      @error = error
+      @triggerError()
 
 
 module.exports = (template) ->

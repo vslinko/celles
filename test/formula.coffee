@@ -43,3 +43,15 @@ describe "celles.formula.FormulaCell", ->
         two + four
       formulaCell.subscribe callback
       expect(callback).to.be.calledWith 6
+
+    it "should trigger error if formula throws", ->
+      count = 0
+      formula = ->
+        count += 1
+        throw new Error if count is 2
+      cell = celles.formula [], formula
+      expect(cell.error).to.equals null
+      callback = sinon.spy()
+      cell.onError callback
+      cell.calculate()
+      expect(callback).to.be.calledOnce

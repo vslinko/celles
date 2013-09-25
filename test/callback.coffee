@@ -18,3 +18,8 @@ describe "celles.BaseCell", ->
       cell.onChange ->
         expect(cell.value).to.equal 123
         callback()
+
+    it "should set error if callback throws", ->
+      cell = celles.callback (callback) ->
+        throw new Error
+      expect(cell.error).to.be.instanceOf Error

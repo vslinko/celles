@@ -20,6 +20,12 @@ describe "celles.template.TemplateCell", ->
       cell.set 2
       expect(templateCell.value).to.eql prop: 2
 
+    it "should trigger error if cell has error", ->
+      cell = celles.cell()
+      cell.throw new Error
+      templateCell = celles.template prop: cell
+      expect(templateCell.error).to.equals cell.error
+
     it "should subscribe to cells recursively", ->
       cell = celles.cell 1
       templateCell = celles.template level1: level2: cell
@@ -36,15 +42,6 @@ describe "celles.template.TemplateCell", ->
       templateCell = celles.template [cell]
       cell.set 2
       expect(templateCell.value).to.eql [2]
-
-    it "should trigger callbacks only if property changed", ->
-      callback = sinon.spy()
-      cell = celles.cell 0
-      templateCell = celles.template prop: cell
-      templateCell.onChange callback
-      expect(callback).to.be.not.called
-      cell.triggerChange()
-      expect(callback).to.be.not.called
 
     it "should throw error if template is cell", ->
       cell = celles.cell 0

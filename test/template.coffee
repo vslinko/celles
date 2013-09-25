@@ -26,6 +26,17 @@ describe "celles.template.TemplateCell", ->
       cell.set 2
       expect(templateCell.value).to.eql level1: level2: 2
 
+    it "should subscribe to cells in arrays", ->
+      cell = celles.cell 1
+      templateCell = celles.template prop: [cell]
+      cell.set 2
+      expect(templateCell.value).to.eql prop: [2]
+
+      cell = celles.cell 1
+      templateCell = celles.template [cell]
+      cell.set 2
+      expect(templateCell.value).to.eql [2]
+
     it "should trigger callbacks only if property changed", ->
       callback = sinon.spy()
       cell = celles.cell 0
@@ -34,3 +45,10 @@ describe "celles.template.TemplateCell", ->
       expect(callback).to.be.not.called
       cell.triggerChange()
       expect(callback).to.be.not.called
+
+    it "should throw error if template is cell", ->
+      cell = celles.cell 0
+      expect(-> celles.template cell).to.throw Error
+
+    it "should throw error if template is scalar value", ->
+      expect(-> celles.template 1).to.throw Error

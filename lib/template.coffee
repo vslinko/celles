@@ -1,4 +1,4 @@
-BaseCell = require "./base_cell"
+BaseCell = require "./base_cell.coffee"
 
 
 class TemplateCell extends BaseCell

@@ -1,6 +1,6 @@
 {
   "name": "celles",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Small FRP library",
   "keywords": ["frp"],
   "homepage": "https://github.com/vslinko/celles",

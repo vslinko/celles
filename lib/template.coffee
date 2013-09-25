@@ -1,28 +1,36 @@
 BaseCell = require "./base_cell.coffee"
 
 
+recursivelyCalculate = (valueRoot, templateRoot, callback) ->
+  for key, cell of templateRoot
+    if cell instanceof BaseCell
+      valueRoot[key] = cell.value
+      callback valueRoot, key, cell if callback
+
+    else if cell instanceof Object
+      valueRoot[key] = {}
+      recursivelyCalculate valueRoot[key], cell, callback
+
+    else
+      valueRoot[key] = cell
+
+
+
 class TemplateCell extends BaseCell
   constructor: (@template) ->
     super()
 
-    @calculate()
+    @value = {}
 
-    for key, cell of @template
-      do (key, cell) =>
-        if cell instanceof BaseCell
-          cell.onChange =>
-            if @value[key] isnt cell.value
-              @value[key] = cell.value
-              @triggerChange()
+    recursivelyCalculate @value, @template, (valueRoot, key, cell) =>
+      cell.onChange =>
+        if valueRoot[key] isnt cell.value
+          valueRoot[key] = cell.value
+          @triggerChange()
 
   calculate: ->
     @value = {}
-
-    for key, cell of @template
-      @value[key] = if cell instanceof BaseCell
-        cell.value
-      else
-        cell
+    recursivelyCalculate @value, @template
 
 
 module.exports = (template) ->

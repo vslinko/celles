@@ -20,6 +20,12 @@ describe "celles.template.TemplateCell", ->
       cell.set 2
       expect(templateCell.value).to.eql prop: 2
 
+    it "should subscribe to cells recursively", ->
+      cell = celles.cell 1
+      templateCell = celles.template level1: level2: cell
+      cell.set 2
+      expect(templateCell.value).to.eql level1: level2: 2
+
     it "should trigger callbacks only if property changed", ->
       callback = sinon.spy()
       cell = celles.cell 0

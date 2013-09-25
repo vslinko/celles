@@ -13,7 +13,7 @@ describe "celles.callback.CallbackCell", ->
       cell = celles.callback (callback) ->
         setTimeout ->
           callback 123
-        , 100
+        , 0
       expect(cell.value).to.equal null
       cell.onChange ->
         expect(cell.value).to.equal 123

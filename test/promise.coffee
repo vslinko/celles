@@ -13,7 +13,7 @@ describe "celles.promise.PromiseCell", ->
       promise = then: (resolve, reject) ->
         setTimeout ->
           resolve 123
-        , 100
+        , 0
 
       cell = celles.promise promise
       expect(cell.value).to.equal null
@@ -25,7 +25,7 @@ describe "celles.promise.PromiseCell", ->
       promise = then: (resolve, reject) ->
         setTimeout ->
           reject new Error
-        , 100
+        , 0
 
       cell = celles.promise promise
       expect(cell.error).to.equal null
